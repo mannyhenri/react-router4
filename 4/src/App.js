@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import Header from './components/Header';
-import Grid from './components/Grid';
-import Form from './components/Form';
 import firebase from 'firebase';
 import _ from 'lodash';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import Page1 from './components/Page1';
+import Page2 from './components/Page2';
+import Page3 from './components/Page3';
+import Lost from './components/Lost';
 
 // styles in-component - pay attention to the syntax
 const styles = {
@@ -88,14 +91,25 @@ export default class App extends Component {
   
   render() {
     return (
-      <div style={styles}>
-        <Header name={this.state.name}/>
-        <Form currentTitle={this.state.currentTitle} 
-          currentDetails={this.state.currentDetails}
-          handleChange={this.handleChange.bind(this)}
-          handleSubmit={this.handleSubmit.bind(this)}/>
-        <Grid notes={this.state.notes} deleteNote={this.deleteNote.bind(this)} />
-      </div>
+      <Router>
+        <div style={styles}>
+          <Header name={this.state.name}/>
+          <Switch>
+            <Route exact path='/' render={(props) => (
+            <Page1
+              notes={this.state.notes}
+              deleteNote={this.deleteNote.bind(this)}
+              currentTitle={this.state.currentTitle} 
+              currentDetails={this.state.currentDetails}
+              handleChange={this.handleChange.bind(this)}
+              handleSubmit={this.handleSubmit.bind(this)}/>
+          )}/>
+            <Route path='/page2' component={Page2}/>
+            <Route path='/page3' component={Page3}/>
+            <Route component={Lost}/>
+          </Switch>
+        </div>
+      </Router>
     );
   }
 }
